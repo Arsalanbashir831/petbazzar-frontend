@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { SearchableSelect } from '@/components/seller/dashboard/SearchableSelect'
+import { SearchableSelect } from '@/components/seller/dashboard/searchable-select'
 import {
     ResponsiveContainer,
     BarChart,

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import AuthLayout from '../../../components/auth/auth-layout'
 import Link from 'next/link'
-import { ROUTES } from '@/contants/routes'
+import { ROUTES } from '@/constants/routes'
 import { OAuthButtons } from '@/components/auth/oauth-buttons'
 
 export default function LoginPage() {

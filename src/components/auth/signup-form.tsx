@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { OAuthButtons } from '@/components/auth/oauth-buttons'
 import Link from 'next/link'
-import { ROUTES } from '@/contants/routes'
+import { ROUTES } from '@/constants/routes'
 
 interface SignupFormProps {
     formData: {

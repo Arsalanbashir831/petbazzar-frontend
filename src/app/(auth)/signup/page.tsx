@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import AuthLayout from '../../../components/auth/auth-layout'
-import { ROUTES } from '@/contants/routes'
+import { ROUTES } from '@/constants/routes'
 
 // Import step components
 import SignupForm from '@/components/auth/signup-form'
