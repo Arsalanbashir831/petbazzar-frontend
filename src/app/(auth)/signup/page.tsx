@@ -7,8 +7,8 @@ import AuthLayout from '../../../components/auth/auth-layout'
 import { ROUTES } from '@/contants/routes'
 
 // Import step components
-import SignupForm from '@/components/auth/signup-steps/signup-form'
-import OtpVerification from '@/components/auth/signup-steps/OtpVerification'
+import SignupForm from '@/components/auth/signup-form'
+import OtpVerification from '@/components/auth/onboarding/otp-verification'
 
 // Signup form data interface
 interface SignupFormData {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
-import StepIndicator from './StepIndicator'
+import StepIndicator from './onboarding/step-indicator'
 
 interface AuthLayoutProps {
     children: React.ReactNode

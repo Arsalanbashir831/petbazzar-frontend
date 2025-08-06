@@ -7,9 +7,9 @@ import AuthLayout from '@/components/auth/auth-layout'
 import { ROUTES } from '@/contants/routes'
 
 // Import step components
-import StoreDetailsStep from '@/components/auth/signup-steps/StoreDetailsStep'
-import StoreLocationStep from '@/components/auth/signup-steps/StoreLocationStep'
-import IdentityStep from '@/components/auth/signup-steps/IdentityStep'
+import StoreDetailsStep from '@/components/auth/onboarding/store-details-step'
+import StoreLocationStep from '@/components/auth/onboarding/store-location-step'
+import IdentityStep from '@/components/auth/onboarding/identity-step'
 
 // Step configurations
 const ONBOARDING_STEPS = [
@@ -121,7 +121,6 @@ export default function OnboardingPage() {
                         }}
                         updateFormData={updateStoreDetails}
                         onNext={handleNext}
-                        onPrevious={handlePrevious}
                     />
                 )
             case 2:

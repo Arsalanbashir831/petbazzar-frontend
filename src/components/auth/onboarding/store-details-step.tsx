@@ -14,7 +14,7 @@ interface StoreDetailsStepProps {
     }
     updateFormData: (field: 'name' | 'storeName' | 'storeLogo', value: string) => void
     onNext: () => void
-    onPrevious: () => void
+    onPrevious?: () => void
 }
 
 export default function StoreDetailsStep({ formData, updateFormData, onNext, onPrevious }: StoreDetailsStepProps) {
@@ -89,14 +89,15 @@ export default function StoreDetailsStep({ formData, updateFormData, onNext, onP
                 </div>
 
                 <div className="flex gap-2">
+                    {onPrevious && (
                     <Button
                         type="button"
                         onClick={onPrevious}
                         variant="outline"
-                        className="flex-1 h-10"
-                    >
+                        className="flex-1 h-10">
                         Previous
                     </Button>
+                    )}
                     <Button
                         type="submit"
                         className="flex-1 h-10 bg-[#f9690f] hover:bg-[#f9690f]/90 text-white"
