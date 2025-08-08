@@ -2,39 +2,23 @@
 
 import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
 
 // Components
 import PageHeader from '@/components/common/page-header'
 import StatCard from '@/components/seller/dashboard/stat-card'
 import AnalyticsOverview from '@/components/common/analytics/overview'
-import { Column } from '@/components/ui/table'
 import OrdersTable, { mapSellerOrdersToRows } from '@/components/common/orders-table'
 import type { Order } from '@/types/order'
 import { sellerOrders as ALL_ORDERS } from '@/lib/mocks/orders'
-
-// Constants
-import { ORDER_STATUS_COLORS } from '@/constants/status'
-
+import {
+    analyticsProducts as PRODUCTS,
+    inventoryStats as INVENTORY_STATS,
+    topSellingStats as TOP_SELLING_STATS,
+  } from '@/lib/mocks/analytics'
 
 // Mock Data
 const RECENT_ORDERS: Order[] = mapSellerOrdersToRows(ALL_ORDERS.slice(0, 5))
 
-const inventoryData = [
-    { name: 'Diamond Care Cat Food 2.7kg', value: 35 },
-    { name: 'Chewy Dog Stuff Toy', value: 20 },
-    { name: 'Dog Food', value: 17 },
-    { name: 'Cat Food', value: 12 },
-    { name: 'Diamond Care Cat Food 5kg', value: 12 },
-]
-
-const topSellingData = [
-    { name: 'Diamond Care Cat Food 2.7kg', value: 35 },
-    { name: 'Chewy Dog Stuff Toy', value: 20 },
-    { name: 'Dog Food', value: 17 },
-    { name: 'Cat Food', value: 12 },
-    { name: 'Diamond Care Cat Food 5kg', value: 10 },
-]
 
 const monthlyQuantity = [
     { month: 'Jan', quantity: 15 },
@@ -52,7 +36,7 @@ const monthlyQuantity = [
 ]
 
 // Sales data for summary card
-const monthlySales = [
+const MONTHLY_SALES = [
     { month: 'Jan', sales: 50000 },
     { month: 'Feb', sales: 45000 },
     { month: 'Mar', sales: 120000 },
@@ -67,51 +51,16 @@ const monthlySales = [
     { month: 'Dec', sales: 50000 },
 ]
 
-const products = [
-    'Trixie Dog Food',
-    'Diamond Care Cat Food',
-    'Dog House',
-    'Collar',
-    'Chewy Dog Stuff Toy',
-    'Cat Food',
-]
 
-// Table Columns
-const columns: Column<Order>[] = [
-    { header: 'Order', accessor: 'order' },
-    { 
-        header: 'Product', 
-        accessor: 'product', 
-        Cell: (row) => (
-            <Link href={`/seller/orders/${row.id}`} className="hover:no-underline">
-                {row.product}
-            </Link>
-        )
-    },
-    { header: 'Category', accessor: 'category' },
-    { header: 'Quantity', accessor: 'quantity' },
-    { header: 'Stock Quantity', accessor: 'stockQuantity' },
-    { header: 'Price', accessor: 'price' },
-    { header: 'Date', accessor: 'date' },
-    {
-        header: 'Status',
-        accessor: 'status',
-        Cell: (row) => (
-            <span className={cn('inline-block px-2 py-1 text-xs font-medium rounded', ORDER_STATUS_COLORS[row.status])}>
-                {row.status}
-            </span>
-        ),
-    },
-]
 
 export default function DashboardPage() {
-    const maxInventory = useMemo(() => Math.max(...inventoryData.map((i) => i.value)), [])
+    const maxInventory = useMemo(() => Math.max(...INVENTORY_STATS.map((i) => i.value)), [])
     const totalOrders = RECENT_ORDERS.length
     const [period, setPeriod] = useState<'Monthly' | 'Yearly'>('Monthly')
     const [year, setYear] = useState(2025)
-    const [selected, setSelected] = useState(products[0])
+    const [selected, setSelected] = useState(PRODUCTS[0])
 
-    const summaryData = period === 'Monthly' ? monthlySales : [
+    const summaryData = period === 'Monthly' ? MONTHLY_SALES : [
         { month: '2021', sales: 1200000 },
         { month: '2022', sales: 1800000 },
         { month: '2023', sales: 2400000 },
@@ -167,13 +116,13 @@ export default function DashboardPage() {
                 year={year}
                 onYearChange={setYear}
                 summaryData={summaryData}
-                products={products}
+                products={PRODUCTS}
                 selectedProduct={selected}
                 onProductChange={setSelected}
                 quantityData={monthlyQuantity}
-                inventoryItems={inventoryData}
+                inventoryItems={INVENTORY_STATS}
                 maxInventory={maxInventory}
-                topSellingItems={topSellingData}
+                topSellingItems={TOP_SELLING_STATS}
             />
 
             {/* Recent Orders Table (TanStack + shared columns) */}
