@@ -1,5 +1,5 @@
 import { ROUTES } from '@/constants/routes'
-import { NavItem } from '@/types/dashboard'
+import type { NavItem } from '@/types/nav'
 import { Box, LayoutDashboard, UserCircle, Package, Settings, Wallet, Warehouse } from 'lucide-react'
 
 export const SELLER_NAV_ITEMS: NavItem[] = [

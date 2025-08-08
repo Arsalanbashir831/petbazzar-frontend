@@ -3,6 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import SidebarTrigger from './sidebar-trigger'
 
 interface PageHeaderProps {
   title: string
@@ -16,6 +17,7 @@ interface PageHeaderProps {
   actions?: React.ReactNode
   children?: React.ReactNode
   className?: string
+  showSidebarTrigger?: boolean
 }
 
 export default function PageHeader({
@@ -25,10 +27,14 @@ export default function PageHeader({
   actions,
   children,
   className,
+  showSidebarTrigger = true,
 }: PageHeaderProps) {
   return (
     <div className={cn('flex items-center justify-between mb-6', className)}>
       <div className="flex items-center space-x-3">
+        {showSidebarTrigger && (
+           <SidebarTrigger />
+          )}
         {icon && (
           <Image
             src={icon.src}

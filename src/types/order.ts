@@ -15,8 +15,11 @@ export interface ProductRow {
   id: number
   name: string
   image: string
-  stats: { sold: number; likes: number; views: number }
+  orders: number
+  likes: number
+  views: number
   stock: number
+  status?: 'Active' | 'Inactive' | 'Pending' | 'Violation' | 'Deleted'
 }
 
 

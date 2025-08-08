@@ -3,7 +3,8 @@
 import { useState, useMemo } from 'react'
 import { CreditCard, ArrowRight, Search } from 'lucide-react'
 import Image from 'next/image'
-import Table, { Column } from '@/components/ui/table'
+import DataTableRT from '@/components/common/data-table-rt'
+import type { ColumnDef } from '@tanstack/react-table'
 import { Separator } from '@/components/ui/separator'
 import FilterBar from '@/components/common/filter-bar'
 import { formatCurrencyPKR } from '@/lib/format'
@@ -47,35 +48,36 @@ export default function TransactionsPage() {
     }, [search, statusFilter])
 
     // define columns for the Table component
-    const columns = useMemo<Column<Transaction>[]>(() => [
-        { header: 'Order', accessor: 'order' },
-        { header: 'Date', accessor: 'date' },
-        { header: 'Product', accessor: 'product' },
-        { header: 'Quantity', accessor: 'quantity' },
-        { header: 'Amount To Receive', accessor: 'amount' },
+    const columns = useMemo<ColumnDef<Transaction>[]>(() => [
+        { accessorKey: 'order', header: 'Order', cell: ({ row }) => row.original.order },
+        { accessorKey: 'date', header: 'Date', cell: ({ row }) => row.original.date },
+        { accessorKey: 'product', header: 'Product', cell: ({ row }) => row.original.product },
+        { accessorKey: 'quantity', header: 'Quantity', cell: ({ row }) => row.original.quantity },
+        { accessorKey: 'amount', header: 'Amount To Receive', cell: ({ row }) => row.original.amount },
         {
+            accessorKey: 'status',
             header: 'Status',
-            accessor: 'status',
-            Cell: (row) => {
+            cell: ({ row }) => {
+                const v = row.original.status
                 let color = 'bg-yellow-100 text-yellow-800'
-                if (row.status === 'E Wallet') color = 'bg-blue-100 text-blue-800'
-                if (row.status === 'Withdrawn') color = 'bg-green-100 text-green-800'
+                if (v === 'E Wallet') color = 'bg-blue-100 text-blue-800'
+                if (v === 'Withdrawn') color = 'bg-green-100 text-green-800'
                 return (
                     <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${color}`}>
-                        {row.status}
+                        {v}
                     </span>
                 )
             },
         },
         {
+            id: 'action',
             header: 'Action',
-            accessor: 'action',
-            Cell: (row) => (
+            cell: ({ row }) => (
                 <div className="text-sm space-x-4">
-                    <a href={`/seller/orders/${row.order.slice(1)}`} className="underline text-orange-500">
+                    <a href={`/seller/orders/${row.original.order.slice(1)}`} className="underline text-orange-500">
                         View Order
                     </a>
-                    <a href={`/seller/invoice/${row.order.slice(1)}`} className="underline text-orange-500">
+                    <a href={`/seller/invoice/${row.original.order.slice(1)}`} className="underline text-orange-500">
                         Download Invoice
                     </a>
                 </div>
@@ -139,7 +141,7 @@ export default function TransactionsPage() {
             {/* Table */}
             <section className="space-y-2">
                 <h3 className="text-lg font-medium">Transaction History Table</h3>
-                <Table columns={columns} data={filtered} />
+                <DataTableRT columns={columns} data={filtered} />
             </section>
         </div>
     )

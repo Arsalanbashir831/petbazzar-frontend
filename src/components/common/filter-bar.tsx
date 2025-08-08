@@ -2,7 +2,15 @@
 
 import React from 'react'
 import { cn } from '@/lib/utils'
-import { Search, ChevronDown } from 'lucide-react'
+import { Search, Filter, SlidersHorizontal } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface FilterBarProps {
   className?: string
@@ -28,46 +36,60 @@ export default function FilterBar({ className, search, sort, date, right }: Filt
   return (
     <div className={cn('flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4', className)}>
       {search && (
-        <div className="flex items-center flex-1 border border-orange-500 rounded-full overflow-hidden">
-          <Search className="ml-3 text-orange-500" size={18} />
-          <input
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-500" size={18} />
+          <Input
             type="text"
             placeholder={search.placeholder || 'Search'}
             value={search.value}
             onChange={(e) => search.onChange(e.target.value)}
-            className="flex-1 px-3 py-2 focus:outline-none border-0"
+            className="pl-9 rounded-full border border-orange-500 focus-visible:ring-0"
           />
         </div>
       )}
 
       <div className="flex items-center gap-3">
         {sort && (
-          <div className="flex items-center border border-orange-500 rounded-full px-3 py-2">
-            {sort.label && <span className="text-sm text-gray-600 mr-2">{sort.label}</span>}
-            <select
-              value={sort.value}
-              onChange={(e) => sort.onChange(e.target.value)}
-              className="text-sm bg-transparent focus:outline-none"
-            >
-              {sort.options.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="ml-1 text-gray-500" size={16} />
+          <div className="flex items-center border border-orange-500 rounded-full px-3">
+            <Select value={sort.value} onValueChange={sort.onChange}>
+              <div className="relative flex items-center">
+                <SelectTrigger
+                  aria-label={sort.label || 'Sort By'}
+                  showIcon={false}
+                  className="h-10 bg-transparent border-none shadow-none outline-none focus:ring-0 focus-visible:ring-0 pr-8 pl-0 gap-2"
+                >
+                  {sort.label && (
+                    <>
+                  <span className="text-gray-400 text-xl">▾</span>
+                    <span className="text-sm text-gray-600">{sort.label}</span>
+                    </>
+                  )}
+                  <SelectValue className="text-sm font-semibold" />
+                </SelectTrigger>
+                <SlidersHorizontal className="absolute right-0 text-orange-500" size={16} />
+              </div>
+              <SelectContent className="rounded-xl border border-border bg-card px-2">
+                {sort.options.map((opt, idx) => (
+                  <SelectItem
+                    key={opt}
+                    value={opt}
+                    className="pr-8 py-2 rounded-none border-b last:border-b-0 border-border data-[state=checked]:font-semibold data-[state=checked]:text-foreground"
+                  >
+                    {opt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         )}
 
         {date && (
-          <div className="border border-orange-500 rounded-full overflow-hidden">
-            <input
-              type="date"
-              value={date.value}
-              onChange={(e) => date.onChange(e.target.value)}
-              className="h-10 w-36 px-3 text-sm border-none"
-            />
-          </div>
+          <Input
+            type="date"
+            value={date.value}
+            onChange={(e) => date.onChange(e.target.value)}
+            className="h-10 w-36 px-3 text-sm rounded-full border border-orange-500 focus-visible:ring-0"
+          />
         )}
 
         {right}

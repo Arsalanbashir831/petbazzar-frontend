@@ -3,13 +3,25 @@
 
 import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
-import Table, { Column } from '@/components/ui/table'
+import DataTableRT from '@/components/common/data-table-rt'
+import type { ColumnDef } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { ORDER_STATUS_COLORS } from '@/constants/status'
 import { sellerOrders as ALL_ORDERS } from '@/lib/mocks/orders'
 import FilterBar from '@/components/common/filter-bar'
 import PageHeader from '@/components/common/page-header'
 import StatusBadge from '@/components/common/status-badge'
+import TabsBar from '@/components/common/tabs-bar'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Search as SearchIcon } from 'lucide-react'
+import TabsDropdown from '@/components/common/tabs-dropdown'
 
 type Order = (typeof ALL_ORDERS)[number] & {
     order: string
@@ -79,30 +91,31 @@ export default function OrdersPage() {
     }, [filtered, sort])
 
     // 3) Columns + Link on Order
-    const columns = useMemo<Column<Order>[]>(() => [
+    const columns = useMemo<ColumnDef<Order>[]>(() => [
         {
-            header: 'Order',
-            accessor: 'order',
-            
+            accessorKey: 'order',
+            header: () => 'Order',
+            cell: ({ row }: { row: { original: Order } }) => row.original.order,
+            enableSorting: true,
         },
         {
-            header: 'Product', accessor: 'product', Cell: (row) => (
-                <Link
-                    href={`/seller/orders/${row.id}`}
-                    className="  hover:no-underline"
-                >
-                    {row.product}
+            accessorKey: 'product',
+            header: 'Product',
+            cell: ({ row }: { row: { original: Order } }) => (
+                <Link href={`/seller/orders/${row.original.id}`} className="hover:no-underline">
+                    {row.original.product}
                 </Link>
-            ), },
-        { header: 'Category', accessor: 'category' },
-        { header: 'Quantity', accessor: 'quantity' },
-        { header: 'Stock Quantity', accessor: 'stockQuantity' },
-        { header: 'Price', accessor: 'priceLabel' },
-        { header: 'Date', accessor: 'date' },
+            ),
+        },
+        { accessorKey: 'category', header: 'Category', enableSorting: true },
+        { accessorKey: 'quantity', header: 'Quantity', enableSorting: true },
+        { accessorKey: 'stockQuantity', header: 'Stock Quantity', enableSorting: true },
+        { accessorKey: 'priceLabel', header: 'Price', enableSorting: false },
+        { accessorKey: 'date', header: 'Date', enableSorting: true },
         {
+            accessorKey: 'status',
             header: 'Status',
-            accessor: 'status',
-            Cell: (row) => (<StatusBadge status={row.status} size="sm" />),
+            cell: ({ row }: { row: { original: Order } }) => <StatusBadge status={row.original.status} size="sm" />,
         },
     ], [])
 
@@ -110,44 +123,35 @@ export default function OrdersPage() {
         <div className="space-y-6 px-6 py-4">
             <PageHeader title="Manage Orders" icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop' }} />
 
-            {/* Tabs */}
-            <div className="flex items-center space-x-8 border-b border-border">
-                {TABS.map(tab => {
-                    const isActive = tab === activeTab
-                    const badge = tab === 'New'
-                        ? ORDERS.filter(o => o.status === 'Pending').length
-                        : null
-
-                    return (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab)}
-                            className={cn(
-                                'relative pb-2 text-sm font-medium transition',
-                                isActive
-                                    ? 'border-b-2 border-orange-500 text-orange-500'
-                                    : 'text-muted-foreground hover:text-foreground'
-                            )}
-                        >
-                            {tab}
-                            {badge && (
-                                <span className="ml-1 inline-block rounded-full bg-orange-500 px-2 py-0.5 text-xs font-semibold text-white">
-                                    {badge}
-                                </span>
-                            )}
-                        </button>
-                    )
-                })}
-            </div>
-
-            <FilterBar
-                className="pt-4"
-                search={{ value: search, placeholder: 'Search Product by id or name', onChange: setSearch }}
-                sort={{ value: sort, options: [...SORT_OPTIONS], onChange: (v) => setSort(v as typeof SORT_OPTIONS[number]), label: 'Sort By:' }}
-            />
+            {/* Desktop: TabsBar + FilterBar */}
+            <div className="hidden md:block">
+                <TabsBar
+                    value={activeTab}
+                    onValueChange={(v) => setActiveTab(v as typeof TABS[number])}
+                    items={TABS.map((tab) => ({
+                        value: tab,
+                        label: tab,
+                        badge: tab === 'New' ? ORDERS.filter(o => o.status === 'Pending').length : undefined,
+                    }))}
+                />
+                    </div>
+                <FilterBar
+                    className="pt-4"
+                    search={{ value: search, placeholder: 'Search Product by id or name', onChange: setSearch }}
+                    sort={{ value: sort, options: [...SORT_OPTIONS], onChange: (v) => setSort(v as typeof SORT_OPTIONS[number]), label: 'Sort By:' }}
+                    right={
+                    <div className='md:hidden'>
+                    <TabsDropdown value={activeTab} onValueChange={(v) => setActiveTab(v as typeof TABS[number])} items={TABS.map((tab) => ({
+                        value: tab,
+                        label: tab,
+                        badge: tab === 'New' ? ORDERS.filter(o => o.status === 'Pending').length : undefined,
+                    }))} />
+                    </div>
+                    }
+                />
 
             {/* Orders Table */}
-            <Table columns={columns} data={sorted} />
+            <DataTableRT columns={columns} data={sorted} />
         </div>
     )
 }
