@@ -12,7 +12,7 @@ import {
     adminComplaints,
     AdminComplaint,
 } from '@/lib/mockStoreData';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 export default function ComplaintsPage() {
     const [tab, setTab] = useState<'all' | 'pending' | 'refund' | 'completed'>('pending');

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Edit2 } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 export default function AccountPage() {
     const [email, setEmail] = useState('zawarAhmedfarooqi@gmail.com');

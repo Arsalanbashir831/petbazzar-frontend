@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import PageHeader from '@/components/common/page-header'
 import { SearchableSelect } from '@/components/seller/dashboard/searchable-select'
 import {
     ResponsiveContainer,
@@ -115,7 +116,10 @@ export default function SalesAnalyticsPage() {
 
     return (
         <div className="space-y-6 px-6 py-4">
-            <h2 className="text-2xl font-bold">Sales Analytics</h2>
+            <PageHeader
+                title="Sales Analytics"
+                icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop' }}
+            />
 
             {/* Total Sales Card */}
             <div className="bg-card rounded-lg shadow-sm p-6 space-y-4">

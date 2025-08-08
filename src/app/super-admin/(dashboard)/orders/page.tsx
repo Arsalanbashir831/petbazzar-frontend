@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { orders as allOrders, Order } from '@/lib/mockStoreData';
 import Table, { Column } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Search, ChevronDown } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
+import FilterBar from '@/components/common/filter-bar';
+import PageHeader from '@/components/common/page-header';
+import { ORDER_STATUS_COLORS } from '@/constants/status';
 
 export default function OrdersPage() {
     const [subTab, setSubTab] = useState<
@@ -58,28 +58,18 @@ export default function OrdersPage() {
         {
             header: 'Status',
             accessor: 'status',
-            Cell: (r) => {
-                const map: Record<string, string> = {
-                    Pending: 'bg-yellow-100 text-yellow-800',
-                    Confirmed: 'bg-blue-100 text-blue-800',
-                    Shipped: 'bg-orange-100 text-orange-800',
-                    Completed: 'bg-green-100 text-green-800',
-                    Cancelled: 'bg-red-100 text-red-800',
-                };
-                const cls = map[r.status] || 'bg-gray-100 text-gray-800';
-                return (
-                    <span className={`px-2 py-1 rounded-md font-medium ${cls}`}>
-                        {r.status}
-                    </span>
-                );
-            },
+            Cell: (r) => (
+                <span className={`px-2 py-1 rounded-md font-medium ${ORDER_STATUS_COLORS[r.status] || 'bg-gray-100 text-gray-800'}`}>
+                    {r.status}
+                </span>
+            ),
         },
     ];
 
     return (
         <div className="p-6 space-y-6">
            
-            <PageHeader title='Orders' userName='Zawar Ahmed Farooqi' />
+            <PageHeader title='Orders' subtitle='Zawar Ahmed Farooqi' />
 
             {/* Tabs */}
             <Tabs defaultValue="all" className="space-y-4 bg-white">
@@ -104,43 +94,12 @@ export default function OrdersPage() {
                 </TabsList>
 
                 <TabsContent value={subTab}>
-                    {/* Search / Sort / Date */}
-                    <div className="flex w-full items-center gap-4 px-4 mb-4">
-                        {/* Search */}
-                        <div className="w-3/5 flex items-center border border-orange-400 rounded-full overflow-hidden">
-                            <Search className="ml-3 text-orange-500" size={18} />
-                            <Input
-                                placeholder="Search Product by id or name"
-                                className="flex-1 border-none ring-0"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                        </div>
-                        {/* Sort */}
-                        <div className="w-1/5 flex items-center border border-orange-400 rounded-full px-3 py-2">
-                            <span className="text-sm text-gray-600">Sort By:</span>
-                            <select
-                                className="ml-2 text-sm bg-transparent focus:outline-none"
-                                value={sort}
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                onChange={(e) => setSort(e.target.value as any)}
-                            >
-                                <option>Latest</option>
-                                <option>Oldest</option>
-                            </select>
-                            <ChevronDown className="ml-1 text-gray-500" size={16} />
-                        </div>
-                        {/* Date filter */}
-                        <div className="w-1/5 border border-orange-400 rounded-full overflow-hidden">
-                            <Input
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                className="h-10 w-36 border-none"
-                            />
-                            
-                        </div>
-                    </div>
+                    <FilterBar
+                        className="px-4 mb-4"
+                        search={{ value: search, placeholder: 'Search Product by id or name', onChange: setSearch }}
+                        sort={{ value: sort, options: ['Latest', 'Oldest'], onChange: (v) => setSort(v as 'Latest' | 'Oldest'), label: 'Sort By:' }}
+                        date={{ value: date, onChange: setDate }}
+                    />
 
                     {/* Table */}
                     <Table columns={columns} data={filtered} />

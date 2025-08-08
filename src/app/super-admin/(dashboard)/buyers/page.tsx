@@ -7,7 +7,7 @@ import Table, { Column } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 import Image from 'next/image';
 
 export default function BuyersPage() {

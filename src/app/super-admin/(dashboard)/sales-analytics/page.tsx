@@ -9,7 +9,7 @@ import { monthlySales, topStores, categoryShare } from '@/lib/mockStoreData';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 export default function SalesAnalyticsPage() {
     const [period, setPeriod] = useState<'Monthly' | 'Yearly'>('Monthly');

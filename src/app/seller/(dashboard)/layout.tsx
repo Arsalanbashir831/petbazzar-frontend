@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import Sidebar from '@/components/seller/dashboard/Sidebar'
-import { SELLER_NAV_ITEMS } from '@/constants/dashboard'
+import { SELLER_NAV_ITEMS } from '@/constants/nav'
 
 interface DashboardLayoutProps {
     children: ReactNode

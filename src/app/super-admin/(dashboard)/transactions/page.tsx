@@ -3,7 +3,6 @@
 
 import React, { useState } from 'react';
 import Table, { Column } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +12,9 @@ import {
     AdminTransaction,
 } from '@/lib/mockStoreData';
 import { cn } from '@/lib/utils';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
+import { ORDER_STATUS_COLORS } from '@/constants/status';
+import FilterBar from '@/components/common/filter-bar';
 
 export default function TransactionsPage() {
     const [tab, setTab] = useState<'all' | 'pending' | 'completed'>('all');
@@ -50,33 +51,16 @@ export default function TransactionsPage() {
         {
             header: 'Status',
             accessor: 'status',
-            Cell: (row) => {
-                // map each status to its exact bg/text color
-                const colorMap: Record<
-                    AdminTransaction['status'],
-                    { bg: string; text: string }
-                > = {
-                    Pending: { bg: 'bg-yellow-50', text: 'text-yellow-600' },
-                    Cancelled: { bg: 'bg-red-50', text: 'text-red-500' },
-                    Confirmed: { bg: 'bg-blue-50', text: 'text-blue-500' },
-                    Delivered: { bg: 'bg-green-50', text: 'text-green-500' },
-                    Shipped: { bg: 'bg-orange-50', text: 'text-orange-500' },
-                    Completed: { bg: 'bg-green-50', text: 'text-green-500' },
-                };
-
-                const { bg, text } = colorMap[row.status];
-                return (
-                    <Badge
-                        className={cn(
-                            bg,
-                            text,
-                            'rounded-full w-20 px-2 py-1 text-sm font-medium'
-                        )}
-                    >
-                        {row.status}
-                    </Badge>
-                );
-            },
+            Cell: (row) => (
+                <Badge
+                    className={cn(
+                        ORDER_STATUS_COLORS[row.status] || 'bg-gray-100 text-gray-800',
+                        'rounded-full w-24 px-2 py-1 text-sm font-medium text-center'
+                    )}
+                >
+                    {row.status}
+                </Badge>
+            ),
         },
         
     ];
@@ -86,7 +70,7 @@ export default function TransactionsPage() {
             {/* Page Header */}
             
             
-            <PageHeader title='Transactions' userName='Zawar Ahmed Farooqi' />
+            <PageHeader title='Transactions' subtitle='Zawar Ahmed Farooqi' />
 
             {/* Tabs + Controls */}
             <Tabs
@@ -136,49 +120,13 @@ export default function TransactionsPage() {
 
                 {['all', 'pending', 'completed'].map((value) => (
                     <TabsContent key={value} value={value} className="p-0 pt-6">
-                        <div className="flex items-center justify-between px-6 mb-4">
-                            {/* Search */}
-                            <div className="flex-1 max-w-lg flex items-center border border-orange-400 rounded-full overflow-hidden">
-                                <Input
-                                    placeholder="Search transactions by id"
-                                    className="flex-1 border-none ring-0 focus:ring-0 px-4 py-2"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                <Button variant="ghost" className="p-2 text-orange-600">
-                                    <Search size={18} />
-                                </Button>
-                            </div>
-
-                            {/* Sort & Date */}
-                            <div className="flex items-center space-x-4 ml-6">
-                                {/* Sort */}
-                                <div className="flex items-center border border-orange-400 rounded-full px-3 py-2">
-                                    <span className="text-sm text-gray-600">Sort By:</span>
-                                    <select
-                                        className="ml-2 text-sm bg-transparent focus:outline-none"
-                                        value={sort}
-                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                        onChange={(e) => setSort(e.target.value as any)}
-                                    >
-                                        <option>Latest</option>
-                                        <option>Oldest</option>
-                                    </select>
-                                    <ChevronDown size={16} className="ml-1 text-gray-500" />
-                                </div>
-
-                                {/* Date */}
-                                <div className="flex items-center border border-orange-400 rounded-full px-3 py-2">
-                                    <Calendar size={16} className="text-gray-500 mr-2" />
-                                    <input
-                                        type="date"
-                                        value={dateFilter}
-                                        onChange={(e) => setDateFilter(e.target.value)}
-                                        className="text-sm bg-transparent focus:outline-none"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                        <FilterBar
+                            className="px-6 mb-4"
+                            search={{ value: search, placeholder: 'Search transactions by id', onChange: setSearch }}
+                            sort={{ value: sort, options: ['Latest', 'Oldest'], onChange: (v) => setSort(v as 'Latest' | 'Oldest'), label: 'Sort By:' }}
+                            date={{ value: dateFilter, onChange: setDateFilter }}
+                            right={<Button variant="ghost" className="p-2 text-orange-600"><Search size={18} /></Button>}
+                        />
 
                         {/* Table */}
                         <Table columns={columns} data={filtered as AdminTransaction[]} />

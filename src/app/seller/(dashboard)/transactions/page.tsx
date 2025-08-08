@@ -1,10 +1,13 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { CreditCard, ArrowRight, Sliders, Search } from 'lucide-react'
+import { CreditCard, ArrowRight, Search } from 'lucide-react'
 import Image from 'next/image'
 import Table, { Column } from '@/components/ui/table'
 import { Separator } from '@/components/ui/separator'
+import FilterBar from '@/components/common/filter-bar'
+import { formatCurrencyPKR } from '@/lib/format'
+import PageHeader from '@/components/common/page-header'
 
 interface Transaction {
     order: string
@@ -82,24 +85,16 @@ export default function TransactionsPage() {
 
     return (
         <div className="space-y-8 px-6 py-4">
-            {/* header + balance */}
-            <div className="w-full flex justify-between items-center">
-                <div className="flex items-center space-x-2">
-                    <Image
-                        src="/seller/dashboard/seller.png"
-                        alt="Fluffy Petshop Logo"
-                        width={32}
-                        height={32}
-                        className="object-cover rounded-full"
-                    />
-                    <h1 className="text-2xl font-semibold">Fluffy Petshop</h1>
-                </div>
+            <PageHeader
+                title="Transactions"
+                icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop Logo' }}
+            >
                 <div className="inline-flex items-center space-x-2 rounded-lg bg-white px-5 py-3 shadow-sm">
                     <CreditCard className="h-5 w-5 text-gray-600" />
                     <span className="text-sm font-medium">Balance:</span>
-                    <span className="text-lg font-semibold text-orange-500">54,000</span>
+                    <span className="text-lg font-semibold text-orange-500">{formatCurrencyPKR(54000)}</span>
                 </div>
-            </div>
+            </PageHeader>
 
             {/* E-Wallet card */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -112,7 +107,7 @@ export default function TransactionsPage() {
                         <div className="flex items-center space-x-4">
                             <CreditCard className="h-10 w-10" />
                             <div>
-                                <div className="text-2xl font-bold">30,000 PKR</div>
+                                <div className="text-2xl font-bold">{formatCurrencyPKR(30000)}</div>
                                 <div className="text-xs">Available for Withdrawal</div>
                             </div>
                         </div>
@@ -125,44 +120,21 @@ export default function TransactionsPage() {
                 </div>
             </div>
 
-            {/* Search + Sort controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                {/* Search */}
-                <div className="flex items-center flex-1 border border-orange-500 rounded-lg overflow-hidden">
-                    <input
-                        type="text"
-                        placeholder="Search Order by id"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="flex-1 px-4 py-2 focus:outline-none"
-                    />
-                    <button className="px-3">
-                        <Search className="w-5 h-5 text-orange-500" />
-                    </button>
-                </div>
-
-                {/* Status Filter */}
-                <div className="flex items-center border border-orange-500 rounded-lg overflow-hidden">
-                    <div className="pl-2 flex justify-center items-center gap-2 text-gray-400">
-                        <Sliders className="w-4 h-4 text-orange-500" /> Sort By:
-                    </div>
+            <FilterBar
+                search={{ value: search, placeholder: 'Search Order by id', onChange: setSearch }}
+                right={
                     <select
                         value={statusFilter}
-                        
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         onChange={(e) => setStatusFilter(e.target.value as any)}
-                        className="px-4 py-2 text-sm focus:outline-none"
+                        className="px-4 py-2 text-sm border border-orange-500 rounded-full"
                     >
-                        
-                        Sort:
                         <option value="All">All</option>
                         <option value="Pending">Pending</option>
                         <option value="E Wallet">E Wallet</option>
                         <option value="Withdrawn">Withdrawn</option>
                     </select>
-
-                </div>
-            </div>
+                }
+            />
 
             {/* Table */}
             <section className="space-y-2">

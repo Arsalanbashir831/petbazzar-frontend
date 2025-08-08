@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 interface PageProps {
     params: Promise<{ id: string }>;

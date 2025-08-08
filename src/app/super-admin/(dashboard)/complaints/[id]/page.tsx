@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
 import { X, ChevronDown } from 'lucide-react';
 import { adminComplaints } from '@/lib/mockStoreData';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 interface PageProps {
     params: Promise<{ id: string }>;

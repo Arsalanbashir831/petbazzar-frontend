@@ -3,9 +3,12 @@
 import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Search, Sliders, Plus, ShoppingBag, Heart, Eye } from 'lucide-react'
+import { Plus, ShoppingBag, Heart, Eye } from 'lucide-react'
 import Table, { Column } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
+import FilterBar from '@/components/common/filter-bar'
+import PageHeader from '@/components/common/page-header'
+import { products as MOCK_PRODUCTS } from '@/lib/mockStoreData'
 
 interface InventoryItem {
     id: number
@@ -17,63 +20,16 @@ interface InventoryItem {
     stock: number
 }
 
-// — replace with your real fetch
-const ITEMS: InventoryItem[] = [
-    {
-        id: 44,
-        name: 'DIAMOND Care Urinary Support Formula For Adult Cats',
-        image: '/seller/dashboard/petCard.png',
-        orders: 32,
-        likes: 112,
-        views: 1000,
-        stock: 29,
-    },
-    {
-        id: 43,
-        name: 'Double Plaster Bowls',
-        image: '/seller/dashboard/petCard.png',
-        orders: 12,
-        likes: 400,
-        views: 3200,
-        stock: 30,
-    },
-    {
-        id: 42,
-        name: 'Double Steel Bowls',
-        image: '/seller/dashboard/petCard.png',
-        orders: 4,
-        likes: 100,
-        views: 500,
-        stock: 5,
-    },
-    {
-        id: 41,
-        name: 'Homie Adult Cat Food',
-        image: '/seller/dashboard/petCard.png',
-        orders: 35,
-        likes: 347,
-        views: 4322,
-        stock: 7,
-    },
-    {
-        id: 40,
-        name: 'DIAMOND Care Urinary Support Formula For Adult Cats',
-        image: '/seller/dashboard/petCard.png',
-        orders: 32,
-        likes: 112,
-        views: 1000,
-        stock: 29,
-    },
-    {
-        id: 39,
-        name: 'Double Steel Bowls',
-        image: '/seller/dashboard/petCard.png',
-        orders: 4,
-        likes: 100,
-        views: 500,
-        stock: 5,
-    },
-]
+// Build from shared mocks
+const ITEMS: InventoryItem[] = MOCK_PRODUCTS.map((p) => ({
+    id: p.id,
+    name: p.name,
+    image: p.image,
+    orders: p.stats.sold,
+    likes: p.stats.likes,
+    views: p.stats.views,
+    stock: p.stock,
+}))
 
 const TABS = ['All', 'Active', 'Inactive', 'Pending', 'Violation', 'Deleted'] as const
 const SORT_OPTIONS = [
@@ -187,29 +143,15 @@ export default function InventoryPage() {
 
     return (
         <div className="space-y-6 px-6 py-4">
-            {/* header + New Product */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                    <Image
-                        src="/seller/dashboard/seller.png"
-                        alt="Fluffy Petshop"
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                    />
-                    <h1 className="text-2xl font-semibold">Fluffy Petshop</h1>
-                </div>
-                
-            </div>
-
-            <div className='w-full flex justify-between items-center '>
-                <h2 className="text-lg font-bold">Inventory</h2>
-                <Link href="/seller/inventory/new">
-                    <button className="flex items-center space-x-2 px-4 py-1 bg-orange-500 text-white rounded">
-                        <Plus className='h-4 w-4' /> <span>New Product</span>
-                    </button>
-                </Link>
-            </div>
+            <PageHeader
+                title="Inventory"
+                icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop' }}
+                actions={
+                    <Link href="/seller/inventory/new" className="flex items-center space-x-2 px-4 py-2 bg-orange-500 text-white rounded">
+                        <Plus className="h-4 w-4" /> <span>New Product</span>
+                    </Link>
+                }
+            />
 
             {/* tabs */}
             <div className="flex items-center space-x-8 gap-8 border-b border-border pl-8">
@@ -232,36 +174,11 @@ export default function InventoryPage() {
                 })}
             </div>
 
-            {/* search & sort */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
-                <div className="flex items-center flex-1 border border-orange-500 rounded-full overflow-hidden">
-                    <input
-                        type="text"
-                        placeholder="Search Product by id or name"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="flex-1 px-4 py-2 focus:outline-none"
-                    />
-                    <button className="px-3">
-                        <Search className="h-5 w-5 text-orange-500" />
-                    </button>
-                </div>
-                <div className="flex items-center border border-orange-500 rounded-full overflow-hidden">
-                    <select
-                        value={sort}
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        onChange={(e) => setSort(e.target.value as any)}
-                        className="px-4 py-2 text-sm focus:outline-none"
-                    >
-                        {SORT_OPTIONS.map((opt) => (
-                            <option key={opt} value={opt}>{opt}</option>
-                        ))}
-                    </select>
-                    <div className="px-3">
-                        <Sliders className="h-5 w-5 text-orange-500" />
-                    </div>
-                </div>
-            </div>
+            <FilterBar
+                className="pt-2"
+                search={{ value: search, placeholder: 'Search Product by id or name', onChange: setSearch }}
+                sort={{ value: sort, options: [...SORT_OPTIONS], onChange: (v) => setSort(v as typeof SORT_OPTIONS[number]), label: 'Sort By:' }}
+            />
 
             {/* data table */}
             <Table columns={columns} data={sorted} />

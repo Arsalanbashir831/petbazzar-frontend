@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import { buyerDetails, BuyerDetail } from '@/lib/mockStoreData';
 import Table, { Column } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 interface PageProps {
     params: Promise<{ id: string }>;

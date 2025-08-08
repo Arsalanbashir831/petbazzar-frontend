@@ -6,6 +6,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ChevronDown, Download } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ORDER_STATUS_COLORS } from '@/constants/status'
+import PageHeader from '@/components/common/page-header'
+import StatusBadge from '@/components/common/status-badge'
 
 interface Order {
     id: string
@@ -82,49 +85,23 @@ export default function OrderPage({
     }
 
     // helper to pick badge styles
-    const statusStyles = {
-        Pending: 'bg-yellow-100 text-yellow-800',
-        Confirmed: 'bg-blue-100 text-blue-800',
-        Shipped: 'bg-orange-100 text-orange-800',
-        Delivered: 'bg-green-100 text-green-800',
-        Cancelled: 'bg-red-100 text-red-800',
-    } as const
+    const statusStyles = ORDER_STATUS_COLORS
 
     const total = order.price * order.quantity + order.shipping.cost
 
     return (
         <div className="px-6 py-4 space-y-6">
-            {/* ← Back + Logo */}
-            <div className="flex items-center space-x-4">
-                
-                <Image
-                    src="/seller/dashboard/seller.png"
-                    alt="Fluffy Petshop"
-                    width={32}
-                    height={32}
-                    className="rounded-lg"
-                />
-                <h1 className="text-2xl font-semibold">Fluffy Petshop</h1>
-            </div>
-            <button
-                onClick={() => router.back()}
-                className="text-foreground hover:text-foreground/80"
-            >
-                <ArrowLeft size={30} />
-            </button>
+            <PageHeader title="Order Details" icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop' }}>
+                <button onClick={() => router.back()} className="text-foreground hover:text-foreground/80">
+                    <ArrowLeft size={24} />
+                </button>
+            </PageHeader>
 
             {/* Title + Status + Actions */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                     <h2 className="text-3xl text-gray-500 font-bold">Order #{order.order}</h2>
-                    <span
-                        className={cn(
-                            'inline-block px-3 py-1 text-sm font-medium rounded',
-                            statusStyles[order.status]
-                        )}
-                    >
-                        {order.status}
-                    </span>
+                    <StatusBadge status={order.status} />
                 </div>
                 <div className="flex items-center space-x-3">
                     {/* Update Status Dropdown */}

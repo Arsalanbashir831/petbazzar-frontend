@@ -17,7 +17,8 @@ import Table, { Column } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, ShoppingCart, Heart, Eye, ChevronDown } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
+import { ORDER_STATUS_COLORS } from '@/constants/status';
 
 export default function StoreDetailPage() {
     const store = storeDetails;
@@ -136,21 +137,11 @@ export default function StoreDetailPage() {
         {
             header: 'Status',
             accessor: 'status',
-            Cell: (r) => {
-                const map: Record<string, string> = {
-                    Pending: 'bg-yellow-100 text-yellow-800',
-                    Cancelled: 'bg-red-100 text-red-800',
-                    Confirmed: 'bg-blue-100 text-blue-800',
-                    Delivered: 'bg-green-100 text-green-800',
-                    Shipped: 'bg-orange-100 text-orange-800',
-                };
-                const classes = map[r.status] || 'bg-gray-100 text-gray-800';
-                return (
-                    <span className={`px-2 py-1 rounded-md font-medium ${classes}`}>
-                        {r.status}
-                    </span>
-                );
-            }
+            Cell: (r) => (
+                <span className={`px-2 py-1 rounded-md font-medium ${ORDER_STATUS_COLORS[r.status] || 'bg-gray-100 text-gray-800'}`}>
+                    {r.status}
+                </span>
+            )
         },
 
     ];

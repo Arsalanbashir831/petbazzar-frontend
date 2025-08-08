@@ -14,7 +14,10 @@ import {
 } from 'recharts'
 
 // Components
-import PageHeader from '@/components/common/dashboard-header'
+import PageHeader from '@/components/common/page-header'
+import HeaderStat from '@/components/common/header-stat'
+import { CreditCard } from 'lucide-react'
+import { formatCurrencyPKR } from '@/lib/format'
 import StatCard from '@/components/seller/dashboard/stat-card'
 import ChartCard from '@/components/seller/dashboard/chart-card'
 import ProgressBar from '@/components/seller/dashboard/progress-bar'
@@ -22,7 +25,8 @@ import DataTable from '@/components/common/data-table'
 import { Column } from '@/components/ui/table'
 
 // Constants
-import { ORDER_STATUS_COLORS, CHART_COLORS } from '@/constants/dashboard'
+import { CHART_COLORS } from '@/constants/dashboard'
+import { ORDER_STATUS_COLORS } from '@/constants/status'
 
 // Types
 interface RecentOrder {
@@ -114,11 +118,10 @@ export default function DashboardPage() {
             {/* Page Header */}
             <PageHeader
                 title="Fluffy Petshop"
-                icon={{
-                    src: "/seller/dashboard/seller.png",
-                    alt: "Fluffy Petshop"
-                }}
-            />
+                icon={{ src: "/seller/dashboard/seller.png", alt: "Fluffy Petshop" }}
+            >
+                <HeaderStat icon={<CreditCard className="h-5 w-5 text-gray-600" />} label="Balance:" value={formatCurrencyPKR(54000)} />
+            </PageHeader>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

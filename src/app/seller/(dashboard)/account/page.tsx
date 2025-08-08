@@ -2,26 +2,17 @@
 
 import Image from 'next/image'
 import { Edit2, MapPin } from 'lucide-react'
+import PageHeader from '@/components/common/page-header'
 
 
 
 export default function AccountPage() {
     return (
         <div className="space-y-6 p-6">
-            {/* 1) Logo + Shop Name */}
-            <div className="flex items-center space-x-2">
-                <Image
-                    src="/seller/dashboard/seller.png"
-                    alt="Fluffy Petshop Logo"
-                    width={900}
-                    height={900}
-                    className="h-8 w-8  object-cover "
-                />
-                <h1 className="text-2xl font-semibold">Fluffy Petshop</h1>
-            </div>
-
-            {/* 2) Page Title */}
-            <h2 className="text-lg font-medium">Account Settings</h2>
+            <PageHeader
+                title="Account Settings"
+                icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop Logo' }}
+            />
 
             <div className="space-y-4">
                 {/* Personal Information */}

@@ -15,7 +15,9 @@ import {
     Line,
 } from 'recharts';
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
+import { ROUTES } from '@/constants/routes';
+import { ORDER_STATUS_COLORS } from '@/constants/status';
 
 export default function SuperAdminDashboard() {
     // === Top‐level stats ===
@@ -93,7 +95,7 @@ export default function SuperAdminDashboard() {
             header: '',
             accessor: '',
             Cell: (row: { id: string; }) => (
-                <Link href={`/admin/stores/${row.id.replace('#', '')}`} className="text-orange-600 whitespace-nowrap underline">
+                <Link href={ROUTES.SUPER_ADMIN.STORE_DETAILS(row.id.replace('#', ''))} className="text-orange-600 whitespace-nowrap underline">
                     All Actions
                 </Link>
             ),
@@ -115,21 +117,21 @@ export default function SuperAdminDashboard() {
             header: 'Status',
             accessor: 'status',
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            Cell: (row: { status: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => (
-                <span className={
-                    row.status === 'Resolving'
-                        ? 'px-2 py-1 rounded-full bg-blue-100 text-blue-800'
-                        : 'px-2 py-1 rounded-full bg-yellow-100 text-yellow-800'
-                }>
-                    {row.status}
-                </span>
-            ),
+            Cell: (row: { status: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<unknown>> | Iterable<ReactNode> | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }) => {
+                const map = { Resolving: 'bg-blue-100 text-blue-800', Pending: ORDER_STATUS_COLORS.Pending } as const;
+                const cls = map[row.status as 'Resolving' | 'Pending'] || 'bg-muted text-foreground';
+                return (
+                    <span className={`px-2 py-1 rounded-full ${cls}`}>
+                        {row.status}
+                    </span>
+                )
+            },
         },
         {
             header: 'View',
             accessor: '',
             Cell: (row: { id: string; }) => (
-                <Link href={`/admin/complaints/${row.id.replace('#', '')}`} className="text-blue-600 underline">
+                <Link href={ROUTES.SUPER_ADMIN.COMPLAINT_DETAILS(row.id.replace('#', ''))} className="text-blue-600 underline">
                     View
                 </Link>
             ),

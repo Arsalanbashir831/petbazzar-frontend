@@ -17,7 +17,7 @@ import {
     DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Download } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
+import PageHeader from '@/components/common/page-header';
 
 interface Store {
     id: string;
