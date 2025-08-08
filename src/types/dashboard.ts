@@ -1,5 +1,3 @@
-import { LucideIcon } from 'lucide-react'
-
 // Order Types
 export interface RecentOrder {
     id: string

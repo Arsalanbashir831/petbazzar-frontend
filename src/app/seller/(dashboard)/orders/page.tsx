@@ -5,7 +5,7 @@ import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Search, Sliders } from 'lucide-react'
-import Table, { Column } from '@/components/Table'
+import Table, { Column } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
 interface Order {

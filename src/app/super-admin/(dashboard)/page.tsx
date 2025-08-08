@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
-import Table from '@/components/Table';
+import Table from '@/components/ui/table';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
     ResponsiveContainer,

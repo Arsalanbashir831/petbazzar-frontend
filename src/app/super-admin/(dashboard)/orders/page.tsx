@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { orders as allOrders, Order } from '@/lib/mockStoreData';
-import Table, { Column } from '@/components/Table';
+import Table, { Column } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Search, ChevronDown } from 'lucide-react';

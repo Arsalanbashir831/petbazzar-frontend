@@ -13,7 +13,7 @@ import {
 } from '@/lib/mockStoreData';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import Table, { Column } from '@/components/Table';
+import Table, { Column } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, ShoppingCart, Heart, Eye, ChevronDown } from 'lucide-react';

@@ -14,12 +14,12 @@ import {
 } from 'recharts'
 
 // Components
-import PageHeader from '@/components/seller/dashboard/page-header'
+import PageHeader from '@/components/common/dashboard-header'
 import StatCard from '@/components/seller/dashboard/stat-card'
 import ChartCard from '@/components/seller/dashboard/chart-card'
 import ProgressBar from '@/components/seller/dashboard/progress-bar'
-import DataTable from '@/components/seller/dashboard/data-table'
-import { Column } from '@/components/Table'
+import DataTable from '@/components/common/data-table'
+import { Column } from '@/components/ui/table'
 
 // Constants
 import { ORDER_STATUS_COLORS, CHART_COLORS } from '@/constants/dashboard'

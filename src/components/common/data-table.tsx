@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import Table, { Column } from '@/components/Table'
+import Table, { Column } from '@/components/ui/table'
 
 interface DataTableProps<T> {
     title: string
@@ -53,7 +53,7 @@ export default function DataTable<T>({
                     <p className="text-muted-foreground">{emptyMessage}</p>
                 </div>
             ) : (
-                <Table columns={columns} data={data} />
+                <Table columns={columns as Column<Record<string, any>>[]} data={data as Record<string, any>[]} />
             )}
         </div>
     )

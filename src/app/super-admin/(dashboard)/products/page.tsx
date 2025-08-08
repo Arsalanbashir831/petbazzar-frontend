@@ -9,7 +9,7 @@ import {
     ProductRow
 } from '@/lib/mockStoreData';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import Table, { Column } from '@/components/Table';
+import Table, { Column } from '@/components/ui/table';
 import Link from 'next/link';
 import { PageHeader } from '@/components/PageHeader';
 

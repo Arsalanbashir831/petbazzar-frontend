@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Search, Sliders, Plus, ShoppingBag, Heart, Eye } from 'lucide-react'
-import Table, { Column } from '@/components/Table'
+import Table, { Column } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
 interface InventoryItem {

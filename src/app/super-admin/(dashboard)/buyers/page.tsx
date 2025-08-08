@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { buyerRows, BuyerRow } from '@/lib/mockStoreData';
-import Table, { Column } from '@/components/Table';
+import Table, { Column } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import Link from 'next/link';

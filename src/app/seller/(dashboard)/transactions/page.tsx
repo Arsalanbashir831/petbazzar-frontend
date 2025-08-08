@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { CreditCard, ArrowRight, Sliders, Search } from 'lucide-react'
 import Image from 'next/image'
-import Table, { Column } from '@/components/Table'
+import Table, { Column } from '@/components/ui/table'
 import { Separator } from '@/components/ui/separator'
 
 interface Transaction {

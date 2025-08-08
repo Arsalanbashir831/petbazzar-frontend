@@ -5,7 +5,7 @@ import React from 'react';
 import { use } from 'react';
 import { notFound } from 'next/navigation';
 import { buyerDetails, BuyerDetail } from '@/lib/mockStoreData';
-import Table, { Column } from '@/components/Table';
+import Table, { Column } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { PageHeader } from '@/components/PageHeader';
 

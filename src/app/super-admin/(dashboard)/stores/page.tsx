@@ -9,7 +9,7 @@ import {
     TabsTrigger,
     TabsContent,
 } from '@/components/ui/tabs';
-import Table, { Column } from '@/components/Table';
+import Table, { Column } from '@/components/ui/table';
 import {
     DropdownMenu,
     DropdownMenuTrigger,
