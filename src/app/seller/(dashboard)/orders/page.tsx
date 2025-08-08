@@ -3,7 +3,7 @@
 
 import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
-import DataTableRT from '@/components/common/data-table-rt'
+import OrdersTable, { mapSellerOrdersToRows } from '@/components/common/orders-table'
 import type { ColumnDef } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { ORDER_STATUS_COLORS } from '@/constants/status'
@@ -30,12 +30,7 @@ type Order = (typeof ALL_ORDERS)[number] & {
 }
 
 // Build from shared mocks
-const ORDERS: Order[] = ALL_ORDERS.map((o) => ({
-    ...o,
-    order: o.id,
-    stockQuantity: o.stock,
-    priceLabel: `RS ${o.price.toLocaleString()}`,
-}))
+const ORDERS: Order[] = mapSellerOrdersToRows(ALL_ORDERS)
 
 const TABS = ['All', 'New', 'Confirmed', 'Shipped', 'Completed', 'Cancelled'] as const
 const SORT_OPTIONS = ['Latest', 'Oldest', 'Low Stock', 'High Stock', 'Price Low to High', 'Price High to Low'] as const
@@ -91,33 +86,7 @@ export default function OrdersPage() {
     }, [filtered, sort])
 
     // 3) Columns + Link on Order
-    const columns = useMemo<ColumnDef<Order>[]>(() => [
-        {
-            accessorKey: 'order',
-            header: () => 'Order',
-            cell: ({ row }: { row: { original: Order } }) => row.original.order,
-            enableSorting: true,
-        },
-        {
-            accessorKey: 'product',
-            header: 'Product',
-            cell: ({ row }: { row: { original: Order } }) => (
-                <Link href={`/seller/orders/${row.original.id}`} className="hover:no-underline">
-                    {row.original.product}
-                </Link>
-            ),
-        },
-        { accessorKey: 'category', header: 'Category', enableSorting: true },
-        { accessorKey: 'quantity', header: 'Quantity', enableSorting: true },
-        { accessorKey: 'stockQuantity', header: 'Stock Quantity', enableSorting: true },
-        { accessorKey: 'priceLabel', header: 'Price', enableSorting: false },
-        { accessorKey: 'date', header: 'Date', enableSorting: true },
-        {
-            accessorKey: 'status',
-            header: 'Status',
-            cell: ({ row }: { row: { original: Order } }) => <StatusBadge status={row.original.status} size="sm" />,
-        },
-    ], [])
+    const columns = useMemo<ColumnDef<Order>[]>(() => ({} as any), [])
 
     return (
         <div className="space-y-6 px-6 py-4">
@@ -151,7 +120,7 @@ export default function OrdersPage() {
                 />
 
             {/* Orders Table */}
-            <DataTableRT columns={columns} data={sorted} />
+            <OrdersTable rows={sorted} />
         </div>
     )
 }

@@ -55,7 +55,7 @@ function SalesSummaryCardComponent({
             <CardTitle className="text-xl">{title}</CardTitle>
             <div className="flex gap-2">
               {/* Period select */}
-              <div className="w-40 border border-border rounded-full px-3">
+              <div className="w-full md:w-40 border border-border rounded-full px-3">
                 <Select value={period} onValueChange={(v) => onPeriodChange(v as PeriodOption)}>
                   <SelectTrigger className="h-8 bg-transparent border-none shadow-none outline-none p-0 focus:ring-0 focus-visible:ring-0">
                     <SelectValue />
@@ -71,7 +71,7 @@ function SalesSummaryCardComponent({
               </div>
 
               {/* Year select */}
-              <div className="w-40 border border-border rounded-full px-3">
+              <div className="w-full md:w-40 border border-border rounded-full px-3">
                 <Select value={String(year)} onValueChange={(v) => onYearChange(Number(v))}>
                   <SelectTrigger className="h-8 bg-transparent border-none shadow-none outline-none p-0 focus:ring-0 focus-visible:ring-0">
                     <SelectValue />

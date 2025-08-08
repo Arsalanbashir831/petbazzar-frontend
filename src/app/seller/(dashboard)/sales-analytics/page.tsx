@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import PageHeader from '@/components/common/page-header'
 import AnalyticsOverview from '@/components/common/analytics/overview'
+import SalesSummaryCard from '@/components/common/analytics/sales-summary-card'
 
 
 type Period = 'Monthly' | 'Yearly'
@@ -109,6 +110,14 @@ export default function SalesAnalyticsPage() {
                 title="Sales Analytics"
                 icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop' }}
             />
+
+<SalesSummaryCard
+        period={period}
+        onPeriodChange={setPeriod}
+        year={year}
+        onYearChange={setYear}
+        data={chartData}
+      />
 
             <AnalyticsOverview
               period={period}

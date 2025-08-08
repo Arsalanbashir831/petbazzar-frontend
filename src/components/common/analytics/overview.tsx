@@ -51,14 +51,6 @@ function AnalyticsOverviewComponent({
 }: AnalyticsOverviewProps) {
   return (
     <div className={className}>
-      <SalesSummaryCard
-        period={period}
-        onPeriodChange={onPeriodChange}
-        year={year}
-        onYearChange={onYearChange}
-        data={summaryData}
-      />
-
       <div className="grid grid-cols-1 lg:grid-cols-[1.75fr_1fr_1fr] gap-4 mt-6">
         <QuantityByProductCard
           products={products}

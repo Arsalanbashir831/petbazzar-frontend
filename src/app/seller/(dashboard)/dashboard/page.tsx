@@ -1,31 +1,17 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import {
-    ResponsiveContainer,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    LineChart,
-    Line,
-} from 'recharts'
 
 // Components
 import PageHeader from '@/components/common/page-header'
-import HeaderStat from '@/components/common/header-stat'
-import { CreditCard } from 'lucide-react'
-import { formatCurrencyPKR } from '@/lib/format'
 import StatCard from '@/components/seller/dashboard/stat-card'
-import ChartCard from '@/components/seller/dashboard/chart-card'
-import ProgressBar from '@/components/seller/dashboard/progress-bar'
-import DataTable from '@/components/common/data-table'
+import AnalyticsOverview from '@/components/common/analytics/overview'
 import { Column } from '@/components/ui/table'
+import OrdersTable, { mapSellerOrdersToRows } from '@/components/common/orders-table'
 
 // Constants
-import { CHART_COLORS } from '@/constants/dashboard'
 import { ORDER_STATUS_COLORS } from '@/constants/status'
 
 // Types
@@ -81,6 +67,31 @@ const monthlyQuantity = [
     { month: 'Dec', quantity: -2 },
 ]
 
+// Sales data for summary card
+const monthlySales = [
+    { month: 'Jan', sales: 50000 },
+    { month: 'Feb', sales: 45000 },
+    { month: 'Mar', sales: 120000 },
+    { month: 'Apr', sales: 60000 },
+    { month: 'May', sales: 65000 },
+    { month: 'June', sales: 55000 },
+    { month: 'July', sales: 110000 },
+    { month: 'Aug', sales: 50000 },
+    { month: 'Sep', sales: 20000 },
+    { month: 'Oct', sales: 30000 },
+    { month: 'Nov', sales: 105000 },
+    { month: 'Dec', sales: 50000 },
+]
+
+const products = [
+    'Trixie Dog Food',
+    'Diamond Care Cat Food',
+    'Dog House',
+    'Collar',
+    'Chewy Dog Stuff Toy',
+    'Cat Food',
+]
+
 // Table Columns
 const columns: Column<RecentOrder>[] = [
     { header: 'Order', accessor: 'order' },
@@ -112,6 +123,17 @@ const columns: Column<RecentOrder>[] = [
 export default function DashboardPage() {
     const maxInventory = useMemo(() => Math.max(...inventoryData.map((i) => i.value)), [])
     const totalOrders = RECENT_ORDERS.length
+    const [period, setPeriod] = useState<'Monthly' | 'Yearly'>('Monthly')
+    const [year, setYear] = useState(2025)
+    const [selected, setSelected] = useState(products[0])
+
+    const summaryData = period === 'Monthly' ? monthlySales : [
+        { month: '2021', sales: 1200000 },
+        { month: '2022', sales: 1800000 },
+        { month: '2023', sales: 2400000 },
+        { month: '2024', sales: 3100000 },
+        { month: '2025', sales: 575000 },
+    ]
 
     return (
         <div className="space-y-6 px-6 py-4">
@@ -120,7 +142,6 @@ export default function DashboardPage() {
                 title="Fluffy Petshop"
                 icon={{ src: "/seller/dashboard/seller.png", alt: "Fluffy Petshop" }}
             >
-                <HeaderStat icon={<CreditCard className="h-5 w-5 text-gray-600" />} label="Balance:" value={formatCurrencyPKR(54000)} />
             </PageHeader>
 
             {/* Stats Cards */}
@@ -155,71 +176,30 @@ export default function DashboardPage() {
                 />
             </div>
 
-            {/* Charts Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {/* Quantity Sold Per Month */}
-                <ChartCard title="Quantity Sold Per Month">
-                    <div style={{ width: '100%', height: 300 }}>
-                        <ResponsiveContainer>
-                            <LineChart
-                                data={monthlyQuantity}
-                                margin={{ top: 10, right: 10, bottom: 10, left: 0 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                                <YAxis />
-                                <Tooltip formatter={(v: number) => `${v}`} />
-                                <Line
-                                    type="monotone"
-                                    dataKey="quantity"
-                                    stroke={CHART_COLORS.primary}
-                                    strokeWidth={2}
-                                    dot={false}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                </ChartCard>
-
-                {/* Inventory & Top Selling */}
-                <div className="flex gap-2">
-                    {/* Inventory */}
-                    <ChartCard title="Inventory" className="w-1/2 px-3 py-6">
-                        <ul className="space-y-3">
-                            {inventoryData.map((item) => (
-                                <li key={item.name}>
-                                    <ProgressBar
-                                        label={item.name}
-                                        value={item.value}
-                                        maxValue={maxInventory}
-                                        size="sm"
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    </ChartCard>
-
-                    {/* Top Selling */}
-                    <ChartCard title="Top Selling" className="w-1/2 p-6">
-                        <ul className="space-y-2">
-                            {topSellingData.map((item) => (
-                                <li key={item.name} className="flex justify-between text-sm font-medium">
-                                    <span className='w-32 truncate'>{item.name}</span>
-                                    <span>{item.value}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </ChartCard>
-                </div>
-            </div>
-
-            {/* Recent Orders Table */}
-            <DataTable
-                title="Recent Orders"
-                data={RECENT_ORDERS}
-                columns={columns}
-                viewAllLink={{ href: "/seller/orders", text: "View all orders" }}
+            {/* Analytics Overview reused from Sales Analytics */}
+            <AnalyticsOverview
+                period={period}
+                onPeriodChange={setPeriod}
+                year={year}
+                onYearChange={setYear}
+                summaryData={summaryData}
+                products={products}
+                selectedProduct={selected}
+                onProductChange={setSelected}
+                quantityData={monthlyQuantity}
+                inventoryItems={inventoryData}
+                maxInventory={maxInventory}
+                topSellingItems={topSellingData}
             />
+
+            {/* Recent Orders Table (TanStack + shared columns) */}
+            <div className="bg-card rounded-lg shadow-sm p-4">
+                <div className="flex items-center justify-between px-2 pb-2">
+                    <h3 className="text-base font-medium">Recent Orders</h3>
+                    <Link href="/seller/orders" className="text-sm text-orange-500">View all orders</Link>
+                </div>
+                <OrdersTable rows={mapSellerOrdersToRows(RECENT_ORDERS as any).slice(0, 5)} />
+            </div>
         </div>
     )
 }
