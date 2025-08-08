@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { CreditCard, ArrowRight, Search } from 'lucide-react'
-import Image from 'next/image'
+import { CreditCard } from 'lucide-react'
 import DataTableRT from '@/components/common/data-table-rt'
 import type { ColumnDef } from '@tanstack/react-table'
-import { Separator } from '@/components/ui/separator'
 import FilterBar from '@/components/common/filter-bar'
 import { formatCurrencyPKR } from '@/lib/format'
 import PageHeader from '@/components/common/page-header'
+import EWalletCard from '@/components/common/e-wallet-card'
+
 
 interface Transaction {
     order: string
@@ -31,11 +31,16 @@ const TRANSACTIONS: Transaction[] = [
     { order: '#6555', date: '4/8/2024', product: 'Dog collar…', quantity: 1, amount: 'RS 3200', status: 'Withdrawn' },
 ]
 
-
+const SORT_OPTIONS = [
+    { label: 'Pending', value: 'Pending' },
+    { label: 'E Wallet', value: 'E Wallet' },
+    { label: 'Withdrawn', value: 'Withdrawn' },
+]
 
 export default function TransactionsPage() {
     const [search, setSearch] = useState('')
     const [statusFilter, setStatusFilter] = useState<'All' | Transaction['status']>('All')
+    const [sort, setSort] = useState<typeof SORT_OPTIONS[number]['value']>(SORT_OPTIONS[0].value)
 
     // filter by order id and status
     const filtered = useMemo(() => {
@@ -90,52 +95,28 @@ export default function TransactionsPage() {
             <PageHeader
                 title="Transactions"
                 icon={{ src: '/seller/dashboard/seller.png', alt: 'Fluffy Petshop Logo' }}
+                className="flex-col md:flex-row items-start md:items-center gap-2"
+                childrenClassName="self-end"
             >
-                <div className="inline-flex items-center space-x-2 rounded-lg bg-white px-5 py-3 shadow-sm">
+                <div className="inline-flex items-center space-x-2 rounded-lg bg-white px-2 py-1 md:px-5 md:py-3 shadow-sm">
                     <CreditCard className="h-5 w-5 text-gray-600" />
-                    <span className="text-sm font-medium">Balance:</span>
-                    <span className="text-lg font-semibold text-orange-500">{formatCurrencyPKR(54000)}</span>
+                    <span className="text-xs md:text-base font-medium">Balance:</span>
+                    <span className="text-xs md:text-lg font-semibold text-orange-500">{formatCurrencyPKR(54000)}</span>
                 </div>
             </PageHeader>
 
             {/* E-Wallet card */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div className="flex-1 space-y-2">
-                    <h2 className="text-xl font-bold">E-Wallet</h2>
-                    <p className="text-sm text-muted-foreground">
-                        All payments received from buyers will be added to your E-Wallet and will be available for withdrawal within 2–3 working days clearance.
-                    </p>
-                    <div className="mt-4  max-w-xs w-56 rounded-lg bg-orange-500 p-4 text-white">
-                        <div className="flex items-center space-x-4">
-                            <CreditCard className="h-10 w-10" />
-                            <div>
-                                <div className="text-2xl font-bold">{formatCurrencyPKR(30000)}</div>
-                                <div className="text-xs">Available for Withdrawal</div>
-                            </div>
-                        </div>
-                        <Separator className="my-3 border-white/40" />
-                        <div className="flex items-center justify-between">
-                            <span>Withdraw</span>
-                            <ArrowRight className="h-5 w-5" />
-                        </div>
-                    </div>
-                </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold">E-Wallet</h2>
+              <p className="text-sm text-muted-foreground">
+                All payments received from buyers will be added to your E-Wallet and will be available for withdrawal within 2–3 working days clearance.
+              </p>
+              <EWalletCard amount={formatCurrencyPKR(30000)} />
             </div>
 
             <FilterBar
-                search={{ value: search, placeholder: 'Search Order by id', onChange: setSearch }}
-                right={
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value as any)}
-                        className="px-4 py-2 text-sm border border-orange-500 rounded-full"
-                    >
-                        <option value="All">All</option>
-                        <option value="Pending">Pending</option>
-                        <option value="E Wallet">E Wallet</option>
-                        <option value="Withdrawn">Withdrawn</option>
-                    </select>
-                }
+              search={{ value: search, placeholder: 'Search Order by id', onChange: setSearch }}
+              sort={{ value: sort, options: SORT_OPTIONS.map(o => o.value), onChange: (v) => setSort(v as typeof SORT_OPTIONS[number]['value']), label: 'Sort By:' }}   
             />
 
             {/* Table */}

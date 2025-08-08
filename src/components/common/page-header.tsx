@@ -18,6 +18,7 @@ interface PageHeaderProps {
   children?: React.ReactNode
   className?: string
   showSidebarTrigger?: boolean
+  childrenClassName?: string
 }
 
 export default function PageHeader({
@@ -27,6 +28,7 @@ export default function PageHeader({
   actions,
   children,
   className,
+  childrenClassName,
   showSidebarTrigger = true,
 }: PageHeaderProps) {
   return (
@@ -51,7 +53,7 @@ export default function PageHeader({
           )}
         </div>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className={cn("flex items-center space-x-4", childrenClassName)}>
         {children}
         {actions}
       </div>
