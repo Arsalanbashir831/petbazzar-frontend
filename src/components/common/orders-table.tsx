@@ -5,15 +5,9 @@ import type { ColumnDef } from '@tanstack/react-table'
 import DataTableRT from '@/components/common/data-table-rt'
 import Link from 'next/link'
 import StatusBadge from '@/components/common/status-badge'
-import type { SellerOrderRow } from '@/types/order'
+import type { Order, SellerOrderRow } from '@/types/order'
 
-export type OrderTableRow = SellerOrderRow & {
-  order: string
-  stockQuantity: number
-  priceLabel: string
-}
-
-export function mapSellerOrdersToRows(orders: SellerOrderRow[]): OrderTableRow[] {
+export function mapSellerOrdersToRows(orders: SellerOrderRow[]): Order[] {
   return orders.map((o) => ({
     ...o,
     order: o.id,
@@ -22,7 +16,7 @@ export function mapSellerOrdersToRows(orders: SellerOrderRow[]): OrderTableRow[]
   }))
 }
 
-export function createOrdersColumns(opts?: { withLink?: boolean }): ColumnDef<OrderTableRow, any>[] {
+export function createOrdersColumns(opts?: { withLink?: boolean }): ColumnDef<Order, any>[] {
   const withLink = opts?.withLink !== false
   return [
     {
@@ -57,7 +51,7 @@ export function createOrdersColumns(opts?: { withLink?: boolean }): ColumnDef<Or
 }
 
 interface OrdersTableProps {
-  rows: OrderTableRow[]
+  rows: Order[]
   className?: string
   withLink?: boolean
 }

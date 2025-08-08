@@ -11,6 +11,12 @@ export interface SellerOrderRow {
   status: OrderStatus
 }
 
+export interface Order extends SellerOrderRow {
+    order: string
+    stockQuantity: number
+    priceLabel: string
+}
+
 export interface ProductRow {
   id: number
   name: string

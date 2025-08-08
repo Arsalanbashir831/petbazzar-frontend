@@ -2,32 +2,15 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import Link from 'next/link'
 import OrdersTable, { mapSellerOrdersToRows } from '@/components/common/orders-table'
 import type { ColumnDef } from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
-import { ORDER_STATUS_COLORS } from '@/constants/status'
 import { sellerOrders as ALL_ORDERS } from '@/lib/mocks/orders'
 import FilterBar from '@/components/common/filter-bar'
 import PageHeader from '@/components/common/page-header'
-import StatusBadge from '@/components/common/status-badge'
 import TabsBar from '@/components/common/tabs-bar'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Search as SearchIcon } from 'lucide-react'
 import TabsDropdown from '@/components/common/tabs-dropdown'
+import type { Order } from '@/types/order'
 
-type Order = (typeof ALL_ORDERS)[number] & {
-    order: string
-    stockQuantity: number
-    priceLabel: string
-}
 
 // Build from shared mocks
 const ORDERS: Order[] = mapSellerOrdersToRows(ALL_ORDERS)

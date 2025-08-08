@@ -10,31 +10,15 @@ import StatCard from '@/components/seller/dashboard/stat-card'
 import AnalyticsOverview from '@/components/common/analytics/overview'
 import { Column } from '@/components/ui/table'
 import OrdersTable, { mapSellerOrdersToRows } from '@/components/common/orders-table'
+import type { Order } from '@/types/order'
+import { sellerOrders as ALL_ORDERS } from '@/lib/mocks/orders'
 
 // Constants
 import { ORDER_STATUS_COLORS } from '@/constants/status'
 
-// Types
-interface RecentOrder {
-    id: string
-    order: string
-    product: string
-    category: string
-    quantity: number
-    stockQuantity: number
-    price: string
-    date: string
-    status: 'Pending' | 'Cancelled' | 'Confirmed' | 'Delivered' | 'Shipped' | 'Completed'
-}
 
 // Mock Data
-const RECENT_ORDERS: RecentOrder[] = [
-    { id: '6548', order: '#6548', product: 'Nutrabold Cat 5kg', category: 'Cat Food', quantity: 1, stockQuantity: 20, price: 'RS 4200', date: '4/8/2024', status: 'Pending' },
-    { id: '6549', order: '#6549', product: 'Dog collar (adjustable)', category: 'Dog Essentials', quantity: 1, stockQuantity: 7, price: 'RS 1200', date: '4/8/2024', status: 'Cancelled' },
-    { id: '6550', order: '#6550', product: 'Diamond care dry Dog Food', category: 'Dog Food', quantity: 3, stockQuantity: 13, price: 'RS 3200', date: '4/8/2024', status: 'Confirmed' },
-    { id: '6551', order: '#6551', product: 'Dog House', category: 'Dog Essentials', quantity: 2, stockQuantity: 5, price: 'RS 6000', date: '4/8/2024', status: 'Delivered' },
-    { id: '6552', order: '#6552', product: 'Nutrabold Cat 2.7kg', category: 'Cat Food', quantity: 1, stockQuantity: 32, price: 'RS 1200', date: '4/8/2024', status: 'Shipped' },
-]
+const RECENT_ORDERS: Order[] = mapSellerOrdersToRows(ALL_ORDERS.slice(0, 5))
 
 const inventoryData = [
     { name: 'Diamond Care Cat Food 2.7kg', value: 35 },
@@ -93,7 +77,7 @@ const products = [
 ]
 
 // Table Columns
-const columns: Column<RecentOrder>[] = [
+const columns: Column<Order>[] = [
     { header: 'Order', accessor: 'order' },
     { 
         header: 'Product', 
