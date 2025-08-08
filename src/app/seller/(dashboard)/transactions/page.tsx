@@ -7,7 +7,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import FilterBar from '@/components/common/filter-bar'
 import { formatCurrencyPKR } from '@/lib/format'
 import PageHeader from '@/components/common/page-header'
-import EWalletCard from '@/components/common/e-wallet-card'
+import EWalletCard from '@/components/seller/transactions/e-wallet-card'
 
 
 interface Transaction {
